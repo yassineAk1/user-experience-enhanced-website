@@ -1,0 +1,71 @@
+{% render 'views/head.liquid' %}
+
+<header>
+  <nav class="header-nav">
+    {% if snapmaps.size > 1 %}
+      <details class="snapmap-dropdown">
+        <summary class="map-title-btn">{{ snapmap.name }} ▾</summary>
+        <ul class="snapmap-dropdown-list">
+          {% for sm in snapmaps %}
+            {% unless sm.uuid == snapmap.uuid %}
+              <li>
+                <a href="/snapmap/{{ sm.uuid }}">{{ sm.name }}</a>
+              </li>
+            {% endunless %}
+          {% endfor %}
+        </ul>
+      </details>
+    {% else %}
+      <span class="map-title">{{ snapmap.name }}</span>
+    {% endif %}
+    <button class="nav-grid-btn" type="button" aria-label="Toon rasterweergave">
+      <img src="/assets/grid.svg" alt="" width="22" height="22">
+    </button>
+  </nav>
+</header>
+
+<div class="success-box" id="succes" role="status">
+  <p>Your snap has been added successfully!</p>
+  <a href="#" class="status-banner-btn">OK</a>
+</div>
+
+<main>
+  {% if groep %}
+    <div class="group-bar">
+      <img class="group-icon" src="/assets/GroupST-Copy.svg" alt="" width="20" height="20">
+      <span class="group-bar-name">{{ groep.name }}</span>
+    </div>
+  {% endif %}
+
+<form method="POST" action="/snapmap/{{ snapmap.uuid }}" enctype="multipart/form-data" id="snap-form" class="camera-section">
+  <input type="file" name="file" accept="image/*" required id="snap-input" class="sr-only">
+  <label for="snap-input" class="camera-btn">
+    <img src="/assets/camera-alt.svg" alt="">
+  </label>
+  <button type="submit" class="ok-btn" id="snap-submit">OK</button>
+</form>
+
+<div id="snap-preview" hidden>
+  <img id="preview-img" src="/assets/placeholder.jpeg" alt="Preview foto">
+  <div class="preview-actions">
+    <label for="snap-input" class="gallery-btn">add from gallery</label>
+    <button type="submit" form="snap-form" class="ok-btn">OK</button>
+  </div>
+</div>
+
+  <ul class="photo-grid">
+    {% for snap in snaps %}
+      <li class="photo-item">
+        <a href="/snap/{{ snap.uuid }}">
+          {% if snap.picture %}
+            <img src="https://fdnd-agency.directus.app/assets/{{ snap.picture }}" alt="snap" style="view-transition-name: snap-{{ snap.uuid }}">
+          {% else %}
+            <img src="/assets/placeholder.jpeg" alt="">
+          {% endif %}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</main>
+
+{% render 'views/foot.liquid', activePage: activePage %}
