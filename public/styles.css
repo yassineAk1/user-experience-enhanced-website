@@ -376,7 +376,8 @@ main {
     display: none;
 }
 
-.success-box:target {
+.success-box:target,
+.success-box.visible {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -390,6 +391,25 @@ main {
     width: 80%;
     max-width: 320px;
     z-index: 100;
+}
+
+/* ---------loading state animatie----------- */
+.loader {
+    width: 1rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    animation: loading 1s infinite linear alternate;
+}
+
+.loader[hidden] {
+    display: none;
+}
+
+@keyframes loading {
+    0%  { box-shadow: 20px 0 #3ddc55, -20px 0 #3ddc5533; background: #3ddc55; }
+    33% { box-shadow: 20px 0 #3ddc55, -20px 0 #3ddc5533; background: #3ddc5533; }
+    66% { box-shadow: 20px 0 #3ddc5533, -20px 0 #3ddc55;  background: #3ddc5533; }
+    100%{ box-shadow: 20px 0 #3ddc5533, -20px 0 #3ddc55;  background: #3ddc55; }
 }
 
 .status-banner-btn {

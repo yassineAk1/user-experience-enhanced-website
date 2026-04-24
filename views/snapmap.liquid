@@ -48,6 +48,7 @@
     <label for="snap-input" class="camera-btn">
       <img src="/assets/camera-alt.svg" alt="">
     </label>
+    <div class="loader" id="loading-dots" hidden></div>
     <button type="submit" class="ok-btn" id="snap-submit">OK</button>
   </form>
 
@@ -86,3 +87,54 @@
 </main>
 
 {% render 'views/foot.liquid', activePage: activePage %}
+<script type="module">
+  const snapForm = document.querySelector('#snap-form')
+  const photoGrid = document.querySelector('.photo-grid')
+  const successBox = document.querySelector('#succes')
+  const loadingDots = document.querySelector('#loading-dots')
+
+  const getOkBtns = () => document.querySelectorAll('.ok-btn')
+
+  snapForm.addEventListener('submit', async function (event) {
+    // Stap 1: stop de browser — ga niet weg naar een nieuwe pagina zoals normaal
+    event.preventDefault()
+
+    // Stap 2: verberg de preview en toon de loading animatie zodat de gebruiker weet dat er iets gebeurt
+    document.getElementById('snap-preview').hidden = true
+    loadingDots.hidden = false
+    getOkBtns().forEach(btn => { btn.disabled = true })
+
+    // Stap 3: pak de foto uit de input en stop het in een pakketje (FormData)
+    // FormData en niet URLSearchParams — URLSearchParams kan geen bestanden verwerken
+    const formData = new FormData(snapForm)
+
+    // Stap 4: stuur het pakketje naar de server, precies zoals de browser dat normaal zou doen
+    // await = wacht hier tot de server klaar is voor je verdergaat
+    const response = await fetch(snapForm.action, {
+      method: snapForm.method,
+      body: formData
+    })
+
+    // Stap 5: de server stuurt een volledige HTML-pagina terug — lees die in als tekst
+    const responseText = await response.text()
+
+    // Stap 6: knip alleen de foto-grid uit die HTML, de rest gooi je weg
+    const parser = new DOMParser()
+    const responseDOM = parser.parseFromString(responseText, 'text/html')
+    const newPhotoGrid = responseDOM.querySelector('.photo-grid')
+
+    // Stap 7: vervang de oude foto-grid met de nieuwe — nieuwe foto staat er nu in zonder pagina-reload
+    photoGrid.innerHTML = newPhotoGrid.innerHTML
+
+    // Stap 8: toon de success melding — de box stond er al in de HTML, alleen verborgen via CSS
+    successBox.classList.add('visible')
+
+    // Stap 9: verberg de loading animatie en maak knoppen weer klikbaar
+    loadingDots.hidden = true
+    getOkBtns().forEach(btn => { btn.disabled = false })
+
+    // Stap 10: reset het formulier zodat de gebruiker opnieuw een foto kan kiezen
+    snapForm.reset()
+    document.getElementById('snap-submit').hidden = true
+  })
+</script>
