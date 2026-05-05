@@ -2,7 +2,7 @@
 
 <header>
   <nav class="header-nav">
-    <span class="map-title-btn">{{ snap.snapmap.name }}</span>
+    {% comment %} <span class="map-title-btn">{{ snap.snapmap.name }}</span> {% endcomment %}
   </nav>
 </header>
 
@@ -22,11 +22,15 @@
     </picture>
   </div>
 
-  <div class="snap-detail-info">
-    <p class="snap-detail-author">{{ snap.author.name }}</p>
-    <p class="snap-detail-location">{{ snap.location }}</p>
-    <p class="snap-detail-date">{{ snap.date_created | date: '%d %B %Y, %H:%M' }}</p>
+<div class="snap-detail-info">
+  <div class="snap-tags">
+    <a href="/snapmap/{{ snap.snapmap.uuid }}" class="snap-tag">{{ snap.snapmap.name }}</a>
+    <a href="#" class="snap-tag">{{ snap.author.name }}</a>
+    <a href="#" class="snap-tag">{{ snap.location }}</a>
+    <time datetime="{{ snap.date_created }}">{{ snap.date_created | date: '%d %B %Y %H:%M' }}</time>
   </div>
+</div>
+
 </main>
 
 {% render 'views/foot.liquid', activePage: activePage %}
