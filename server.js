@@ -82,7 +82,7 @@ app.get('/groep/:uuid', async (req, res) => {
 app.get('/snap/:uuid', async (req, res) => {
   // Haalt de snap op inclusief de bijbehorende snapmap (voor de naam in de header)
   const snap = await fetchData(
-    `https://fdnd-agency.directus.app/items/snappthis_snap/${req.params.uuid}?fields=*.*`
+    `https://fdnd-agency.directus.app/items/snappthis_snap/${req.params.uuid}?fields=*.*,actions.*.*`
   )
   res.render('snap.liquid', { snap, activePage: 'home' })
 })

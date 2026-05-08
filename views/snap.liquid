@@ -2,7 +2,29 @@
 
 <header>
   <nav class="header-nav">
-    {% comment %} <span class="map-title-btn">{{ snap.snapmap.name }}</span> {% endcomment %}
+    <a href="/snapmap/{{ snap.snapmap.uuid }}" onclick="history.back(); return false;">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.6 14L18.8 2.8L16 0L0 16L16 32L18.8 29.2L7.6 18H32V14H7.6Z" fill="white"/>
+      </svg>
+    </a>
+    {% assign likes = snap.actions | where: "action", "like" %}
+    {% assign tomatoes = snap.actions | where: "action", "tomato" %}
+    {% assign stars = snap.actions | where: "action", "star" %}
+    <div class="snap-action-counts">
+      <span class="snap-action-count">
+        <svg width="25" height="25" viewBox="0 0 29 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.1522 24.0217C4.80435 17.5217 0 13.1413 0 7.77174C0 3.3913 3.3913 0 7.77174 0C10.1739 0 12.5761 2.14783 14.1304 3.98478C15.6848 2.14783 18.087 0 20.4891 0C24.8696 0 28.2609 3.3913 28.2609 7.77174C28.2609 13.1413 23.4565 17.5217 16.1087 24.0217L14.1304 26L12.1522 24.0217Z" fill="white"/></svg>
+        {{ likes.size }}
+      </span>
+      <span class="snap-action-count">
+        <svg width="25" height="25" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.1689 5.65625C22.9353 7.85934 24.999 10.2779 24.999 13.998C24.9988 20.6257 19.403 25.9998 12.5 26C5.59748 26 0.000267106 20.6255 0 13.998C0 10.6283 1.74904 8.48941 4.07812 6.30957C4.95861 7.22413 5.608 7.42667 6.49902 7.6875C6.04414 8.6704 5.9315 9.60688 6.01562 10.0742C6.1294 10.6939 6.63424 11.1755 7.27051 11.2725C7.65225 11.3322 8.03164 11.3613 8.39258 11.3613C10.1054 11.3613 11.5466 10.6988 12.5703 9.48633C13.6028 10.2898 14.9853 10.6786 16.6084 10.7236C18.5624 10.7778 19.4199 10.3486 19.4199 10.3486C19.4176 10.3268 19.2449 8.71632 18.3086 6.96191C19.2513 6.46991 19.6791 6.14368 20.1689 5.65625ZM15.0186 0C15.0186 0 14.3363 0.747385 13.8809 2.01953C13.7052 2.51029 13.5408 3.13915 13.4053 3.72656C13.8273 3.40769 14.3567 3.08312 14.9912 2.83594C16.1684 2.37743 17.9624 2.51354 19.9375 3.75586C19.93 3.76485 18.8058 5.11917 17.6309 5.67969C16.4529 6.24162 15.8887 6.2652 15.7314 6.28027C16.5273 6.82309 17.2391 7.72764 17.6006 9.21094C17.6006 9.21094 15.8775 9.42685 14.8018 9.02734C13.7261 8.62784 12.8538 8.07992 12.3623 6.78027C12.3382 6.85868 12.182 8.22405 11.0684 8.92773C9.95501 9.63115 8.72584 10.0374 7.50488 9.85059C7.42347 9.83852 7.57968 7.42824 9.69043 6.3125C9.57789 6.3398 8.65473 6.50381 7.36328 6.32227C6.07086 6.14052 4.93568 5.27574 4.17578 4.16016C4.11849 4.07271 6.81735 2.0129 9.80566 3.37891C9.82324 3.38753 10.7823 3.85666 11.5713 4.42285C11.6175 4.0097 11.7196 3.38563 11.9492 2.61719C12.3771 1.18543 13.0928 0.0126953 13.0928 0.0126953L15.0186 0Z" fill="white"/></svg>
+        {{ tomatoes.size }}
+      </span>
+      <span class="snap-action-count">
+        <svg width="25" height="25" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.6842 20.8999L22.1411 26L19.9037 16.3814L27.3684 9.91284L17.5281 9.06853L13.6842 0L9.84032 9.06853L0 9.91284L7.46474 16.3814L5.22737 26L13.6842 20.8999Z" fill="white"/></svg>
+        {{ stars.size }}
+      </span>
+    </div>
+
   </nav>
 </header>
 
@@ -22,15 +44,14 @@
     </picture>
   </div>
 
-<div class="snap-detail-info">
-  <div class="snap-tags">
-    <a href="/snapmap/{{ snap.snapmap.uuid }}" class="snap-tag">{{ snap.snapmap.name }}</a>
-    <a href="#" class="snap-tag">{{ snap.author.name }}</a>
-    <a href="#" class="snap-tag">{{ snap.location }}</a>
-    <time datetime="{{ snap.date_created }}">{{ snap.date_created | date: '%d %B %Y %H:%M' }}</time>
+  <div class="snap-detail-info">
+    <div class="snap-tags">
+      <a href="/snapmap/{{ snap.snapmap.uuid }}" class="snap-tag">{{ snap.snapmap.name }}</a>
+      <a href="#" class="snap-tag">{{ snap.author.name }}</a>
+      <a href="#" class="snap-tag">{{ snap.location }}</a>
+      <time datetime="{{ snap.date_created }}">{{ snap.date_created | date: '%d %B %Y %H:%M' }}</time>
+    </div>
   </div>
-</div>
-
 </main>
 
 {% render 'views/foot.liquid', activePage: activePage %}

@@ -2,6 +2,11 @@
 
 <header>
   <nav class="header-nav">
+    <a href="/snapmap/{{ snapmap.uuid }}" id="preview-back-btn" hidden>
+      <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.6 14L18.8 2.8L16 0L0 16L16 32L18.8 29.2L7.6 18H32V14H7.6Z" fill="white"/>
+      </svg>
+    </a>
     {% if snapmaps.size > 1 %}
       <details class="snapmap-dropdown">
         <summary class="map-title-btn">{{ snapmap.name }} ▾</summary>
@@ -26,7 +31,7 @@
 
 <div class="success-box" id="succes" role="status">
   <p>Your snap has been added successfully!</p>
-  <a href="#" class="status-banner-btn">OK</a>
+  <a href="/snapmap/{{ snapmap.uuid }}" class="status-banner-btn">OK</a>
 </div>
 
 <main>
@@ -54,9 +59,20 @@
 
   <div id="snap-preview" hidden>
     <img id="preview-img" src="/assets/placeholder.jpeg" alt="Preview foto">
+    <div class="preview-info">
+      <span class="preview-tag">{{ snapmap.name }}</span>
+    </div>
     <div class="preview-actions">
-      <label for="snap-input" class="gallery-btn">add from gallery</label>
-      <button type="submit" form="snap-form" class="ok-btn">OK</button>
+      <label for="snap-input" class="retake-btn" aria-label="Opnieuw kiezen">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" fill="#555"/>
+        </svg>
+      </label>
+      <button type="submit" form="snap-form" class="send-btn" aria-label="Versturen">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" fill="white"/>
+        </svg>
+      </button>
     </div>
   </div>
 
@@ -92,15 +108,27 @@
   const photoGrid = document.querySelector('.photo-grid')
   const successBox = document.querySelector('#succes')
   const loadingDots = document.querySelector('#loading-dots')
+  const snapPreview = document.getElementById('snap-preview')
+  const previewImg = document.getElementById('preview-img')
+  const previewBackBtn = document.getElementById('preview-back-btn')
 
   const getOkBtns = () => document.querySelectorAll('.ok-btn')
+
+  document.getElementById('snap-input').addEventListener('change', function () {
+    const file = this.files[0]
+    if (!file) return
+    previewImg.src = URL.createObjectURL(file)
+    snapPreview.hidden = false
+    previewBackBtn.hidden = false
+  })
 
   snapForm.addEventListener('submit', async function (event) {
     // Stap 1: stop de browser — ga niet weg naar een nieuwe pagina zoals normaal
     event.preventDefault()
 
     // Stap 2: verberg de preview en toon de loading animatie zodat de gebruiker weet dat er iets gebeurt
-    document.getElementById('snap-preview').hidden = true
+    snapPreview.hidden = true
+    previewBackBtn.hidden = true
     loadingDots.hidden = false
     getOkBtns().forEach(btn => { btn.disabled = true })
 
