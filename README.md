@@ -163,7 +163,7 @@ De basis werkt op touch. Hover is de verbetering voor muisgebruikers.
 
 ```bash
 # 1. Clone de repo
-git clone https://github.com/jouw-gebruikersnaam/the-web-is-for-everyone-interactive-functionality.git
+git clone https://github.com/yasineak1/the-web-is-for-everyone-interactive-functionality.git
 
 # 2. Ga naar de projectmap
 cd the-web-is-for-everyone-interactive-functionality
